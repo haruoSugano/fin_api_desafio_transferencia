@@ -50,15 +50,15 @@ export class StatementsRepository implements IStatementsRepository {
       } else {
         return acc - operation.amount;
       }
-    }, 0)
+    }, 0);
 
     if (with_statement) {
       return {
         statement,
         balance
-      }
+      };
     }
 
-    return { balance }
+    return { balance };
   }
 }
