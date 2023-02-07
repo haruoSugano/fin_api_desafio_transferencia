@@ -48,7 +48,7 @@ describe("List balance", () => {
             user_id: user_id,
             type: "deposit" as OperationType,
             amount: 10000,
-            description: "teste teste"
+            description: "teste teste",
         });
 
         const balance = await inMemoryStatementsRepository.findStatementOperation({
@@ -83,7 +83,7 @@ describe("List balance", () => {
             user_id: user_id,
             type: "withdraw" as OperationType,
             amount: 5000,
-            description: "teste teste"
+            description: "teste teste",
         });
 
         const balance = await inMemoryStatementsRepository.findStatementOperation({

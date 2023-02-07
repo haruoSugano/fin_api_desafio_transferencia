@@ -44,7 +44,7 @@ describe("Create Statement Controller", () => {
     expect(createDoposit.status).toBe(201);
   });
 
-  it("should be able to create statement transfer", async () => {
+  it("should be able to create statement Withdraw", async () => {
     await request(app).post("/api/v1/users").send({
       email: "test@example.com",
       name: "User Teste",
@@ -67,7 +67,7 @@ describe("Create Statement Controller", () => {
       Authorization: token
     });
 
-    const createTransfer = await request(app).post("/api/v1/statements/transfer").send({
+    const createTransfer = await request(app).post("/api/v1/statements/withdraw").send({
       id: user_id,
       amount: 50,
       description: "test de integracaoA"

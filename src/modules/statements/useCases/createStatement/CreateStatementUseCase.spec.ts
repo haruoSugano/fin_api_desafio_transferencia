@@ -11,121 +11,86 @@ let createUserUseCase: CreateUserUseCase;
 let iAuthenticateUserResponseDTO: IAuthenticateUserResponseDTO;
 
 enum OperationType {
-    DEPOSIT = 'deposit',
-    WITHDRAW = 'withdraw',
-    TRANSFER = 'transfer',
+  DEPOSIT = 'deposit',
+  WITHDRAW = 'withdraw',
+  TRANSFER = 'transfer',
 }
 
 describe("Create Statement", () => {
-    beforeEach(() => {
-        inMemoryUsersRepository = new InMemoryUsersRepository();
-        inMemoryStatementsRepository = new InMemoryStatementsRepository();
-        authenticateUserUseCase = new AuthenticateUserUseCase(inMemoryUsersRepository);
-        createUserUseCase = new CreateUserUseCase(inMemoryUsersRepository);
+  beforeEach(() => {
+    inMemoryUsersRepository = new InMemoryUsersRepository();
+    inMemoryStatementsRepository = new InMemoryStatementsRepository();
+    authenticateUserUseCase = new AuthenticateUserUseCase(inMemoryUsersRepository);
+    createUserUseCase = new CreateUserUseCase(inMemoryUsersRepository);
+  });
+
+  it("should be able to show the amount deposited", async () => {
+    const user = {
+      email: "test@example.com",
+      name: "test",
+      password: "123456"
+    };
+
+    await createUserUseCase.execute({
+      email: user.email,
+      name: user.name,
+      password: user.password
     });
 
-    it("should be able to show the amount deposited", async () => {
-        const user = {
-            email: "test@example.com",
-            name: "test",
-            password: "123456"
-        };
-
-        await createUserUseCase.execute({
-            email: user.email,
-            name: user.name,
-            password: user.password
-        });
-
-        iAuthenticateUserResponseDTO = await authenticateUserUseCase.execute({
-            email: user.email,
-            password: user.password
-        });
-
-        const user_id = iAuthenticateUserResponseDTO.user.id as string
-
-        const deposit = await inMemoryStatementsRepository.create({
-            user_id: user_id,
-            type: "deposit" as OperationType,
-            amount: 10000,
-            description: "teste teste"
-        });
-
-        const balance = await inMemoryStatementsRepository.findStatementOperation({
-            user_id: user_id,
-            statement_id: deposit.id as string
-        });
-
-        expect(balance?.amount).toEqual(deposit.amount);
+    iAuthenticateUserResponseDTO = await authenticateUserUseCase.execute({
+      email: user.email,
+      password: user.password
     });
 
-    it("should be able to show the amount withdrawn", async () => {
-        const user = {
-            email: "test@example.com",
-            name: "test",
-            password: "123456"
-        };
+    const user_id = iAuthenticateUserResponseDTO.user.id as string
 
-        await createUserUseCase.execute({
-            email: user.email,
-            name: user.name,
-            password: user.password
-        });
-
-        iAuthenticateUserResponseDTO = await authenticateUserUseCase.execute({
-            email: user.email,
-            password: user.password
-        });
-
-        const user_id = iAuthenticateUserResponseDTO.user.id as string
-
-        const withdraw = await inMemoryStatementsRepository.create({
-            user_id: user_id,
-            type: "withdraw" as OperationType,
-            amount: 5000,
-            description: "teste teste"
-        });
-
-        const balance = await inMemoryStatementsRepository.findStatementOperation({
-            user_id: user_id,
-            statement_id: withdraw.id as string
-        });
-
-        expect(balance?.amount).toEqual(withdraw.amount);
+    const deposit = await inMemoryStatementsRepository.create({
+      user_id: user_id,
+      type: "deposit" as OperationType,
+      amount: 10000,
+      description: "teste teste"
     });
 
-    it("should be able to show the amount transfer", async () => {
-      const user = {
-          email: "test@example.com",
-          name: "test",
-          password: "123456"
-      };
+    const balance = await inMemoryStatementsRepository.findStatementOperation({
+      user_id: user_id,
+      statement_id: deposit.id as string
+    });
 
-      await createUserUseCase.execute({
-          email: user.email,
-          name: user.name,
-          password: user.password
-      });
+    expect(balance?.amount).toEqual(deposit.amount);
+  });
 
-      iAuthenticateUserResponseDTO = await authenticateUserUseCase.execute({
-          email: user.email,
-          password: user.password
-      });
+  it("should be able to show the amount withdrawn", async () => {
+    const user = {
+      email: "test@example.com",
+      name: "test",
+      password: "123456"
+    };
 
-      const user_id = iAuthenticateUserResponseDTO.user.id as string
+    await createUserUseCase.execute({
+      email: user.email,
+      name: user.name,
+      password: user.password
+    });
 
-      const transfer = await inMemoryStatementsRepository.create({
-          user_id: user_id,
-          type: "transfer" as OperationType,
-          amount: 5000,
-          description: "teste teste"
-      });
+    iAuthenticateUserResponseDTO = await authenticateUserUseCase.execute({
+      email: user.email,
+      password: user.password
+    });
 
-      const balance = await inMemoryStatementsRepository.findStatementOperation({
-          user_id: user_id,
-          statement_id: transfer.id as string
-      });
+    const user_id = iAuthenticateUserResponseDTO.user.id as string
 
-      expect(balance?.amount).toEqual(transfer.amount);
+    const withdraw = await inMemoryStatementsRepository.create({
+      user_id: user_id,
+      type: "withdraw" as OperationType,
+      amount: 5000,
+      description: "teste teste",
+    });
+
+    const balance = await inMemoryStatementsRepository.findStatementOperation({
+      user_id: user_id,
+      statement_id: withdraw.id as string
+    });
+
+    expect(balance?.amount).toEqual(withdraw.amount);
   });
 })

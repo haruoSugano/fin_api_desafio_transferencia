@@ -1,6 +1,6 @@
-import { Statement } from "../../entities/Statement";
+import { Statement } from "modules/statements/entities/Statement";
 
-export type ICreateStatementDTO =
+export type ICreateTransferDTO =
 Pick<
   Statement,
   'user_id' |
